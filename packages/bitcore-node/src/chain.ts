@@ -10,5 +10,9 @@ module.exports = {
   LTC: {
     lib: require('litecore-lib'),
     p2p: require('litecore-p2p'),
+  },
+  DASH: {
+    lib: require('dashcore-lib'),
+    p2p: require('dashcore-p2p'),
   }
 }

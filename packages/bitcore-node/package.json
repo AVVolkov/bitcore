@@ -79,6 +79,8 @@
     "bitcore-p2p-cash": "^8.2.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
+    "@dashevo/dashcore-lib": "^0.17.2",
+    "@dashevo/dashcore-p2p": "^1.1.9",
     "express": "^4.16.3",
     "heapdump": "^0.3.12",
     "http": "0.0.0",
