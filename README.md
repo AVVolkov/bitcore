@@ -12,7 +12,7 @@
 ### Checkout the repo
 
 ```sh
-git clone git@github.com:bitpay/bitcore.git
+git clone git@github.com:AVVolkov/bitcore.git
 git checkout master
 npm install
 ```
