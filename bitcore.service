@@ -1,0 +1,13 @@
+[Unit]
+Description=Bitcore service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/npm run node --prefix /srv/bitcore
+User=volkoff
+Restart=always
+
+KillSignal=SIGHUP
+
+[Install]
+WantedBy=default.target
