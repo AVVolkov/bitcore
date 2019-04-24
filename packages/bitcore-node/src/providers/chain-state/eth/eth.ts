@@ -41,7 +41,13 @@ export class ETHStateProvider extends InternalStateProvider implements CSP.IChai
 
   async getBlock(params: CSP.GetBlockParams) {
     const { network, blockId } = params;
-    return this.getWeb3(network).eth.getBlock(Number(blockId)) as any;
+    try {
+
+      return this.getWeb3(network).eth.getBlock(blockId || 'latest') as any;
+    }
+    catch(err) {
+     console.error('getBlock', err); return [] as any;
+    }
   }
 
   async streamBlocks(params: CSP.StreamBlocksParams) {
@@ -96,6 +102,27 @@ export class ETHStateProvider extends InternalStateProvider implements CSP.IChai
     const { network, rawTx } = params;
     const tx = await this.getWeb3(network).eth.sendSignedTransaction(rawTx);
     return tx;
+  }
+
+  async streamAddressTransactions(params: CSP.StreamAddressUtxosParams) {
+    const { address, network, req, res } = params;
+
+    const web3 = this.getWeb3(network);
+    Storage.stream(
+      new Readable({
+        objectMode: true,
+        read: async function() {
+          const transactions = await new ParityRPC(web3).getTransactionsForAddress(100000, address);
+          for await (const tx of transactions) {
+            this.push(tx);
+          }
+
+          this.push(null);
+        }
+      }),
+      req,
+      res
+    );
   }
 
   async getWalletAddresses(walletId: ObjectID) {
