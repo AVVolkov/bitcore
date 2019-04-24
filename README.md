@@ -151,11 +151,6 @@ npm run node
 ## Applications
 
 - [Bitcore Node](packages/bitcore-node) - A full node with extended capabilities using Bitcoin Core
-- [Bitcore Wallet](packages/bitcore-wallet) - A command-line based wallet client
-- [Bitcore Wallet Client](packages/bitcore-wallet-client) - A client for the wallet service
-- [Bitcore Wallet Service](packages/bitcore-wallet-service) - A multisig HD service for wallets
-- [Bitpay Wallet](https://github.com/bitpay/copay) - An easy-to-use, multiplatform, multisignature, secure bitcoin wallet
-- [Insight](packages/insight-previous) - A blockchain explorer web user interface
 
 ## Libraries
 
@@ -167,7 +162,8 @@ npm run node
 - [Bitcore Mnemonic](packages/bitcore-mnemonic) - Implements mnemonic code for generating deterministic keys
 - [Bitcore P2P](packages/bitcore-p2p) - The peer-to-peer networking protocol for BTC
 - [Bitcore P2P Cash](packages/bitcore-p2p-cash) - The peer-to-peer networking protocol for BCH
-- [Crypto Wallet Core](packages/crypto-wallet-core) - A coin-agnostic wallet library for creating transactions, signing, and address derivation
+- [Bitcore P2P LTC](https://github.com/litecoin-project/litecore-p2p) - The peer-to-peer networking protocol for LTC
+- [Bitcore P2P DASH](https://github.com/dashevo/dashcore-p2p) - The peer-to-peer networking protocol for DASH
 
 ## Extras
 

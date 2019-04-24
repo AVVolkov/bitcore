@@ -8,11 +8,9 @@ module.exports = {
     p2p: require('bitcore-p2p-cash'),
   },
   LTC: {
-    lib: require('litecore-lib'),
     p2p: require('litecore-p2p'),
   },
   DASH: {
-    lib: require('@dashevo/dashcore-lib'),
     p2p: require('@dashevo/dashcore-p2p'),
   },
 }
