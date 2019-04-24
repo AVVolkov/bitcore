@@ -213,7 +213,7 @@ export class P2pWorker {
   async connect() {
     this.setupListeners();
     this.pool.connect();
-    this.connectInterval = setInterval(this.pool.connect.bind(this.pool), 5000);
+    this.connectInterval = setInterval(this.pool.connect.bind(this.pool), 3000);
     return new Promise<void>(resolve => {
       this.pool.once('peerready', () => resolve());
     });
@@ -236,7 +236,7 @@ export class P2pWorker {
       });
       while (!received) {
         this.pool.sendMessage(this.messages.GetHeaders({ starts: candidateHashes }));
-        await wait(1000);
+        await wait(2000);
       }
     });
   }
@@ -252,7 +252,7 @@ export class P2pWorker {
       });
       while (!received) {
         this.pool.sendMessage(this.messages.GetData.forBlock(hash));
-        await wait(1000);
+        await wait(2000);
       }
     });
   }
@@ -311,7 +311,7 @@ export class P2pWorker {
       let parentTip = await ChainStateProvider.getLocalTip({ chain: parentChain, network });
       while (!parentTip || parentTip.height < forkHeight) {
         logger.info(`Waiting until ${parentChain} syncs before ${chain} ${network}`);
-        await wait(5000);
+        await wait(3000);
         parentTip = await ChainStateProvider.getLocalTip({ chain: parentChain, network });
       }
     }
@@ -416,6 +416,7 @@ export class P2pWorker {
       const wasSyncingNode = this.isSyncingNode;
       this.lastHeartBeat = await StateStorage.getSyncingNode({ chain: this.chain, network: this.network });
       const nowSyncingNode = this.isSyncingNode;
+      console.log('refreshSyncingNode', wasSyncingNode, nowSyncingNode, this.isSyncingNode, this.lastHeartBeat);
       if (wasSyncingNode && !nowSyncingNode) {
         throw new Error('Syncing Node Renewal Failure');
       }
@@ -428,7 +429,7 @@ export class P2pWorker {
       } else {
         this.registerSyncingNode({ primary: false });
       }
-      await wait(500);
+      await wait(200);
     }
   }
 
