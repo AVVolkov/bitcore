@@ -58,15 +58,16 @@ export class ParityRPC {
           params: [
             {
               fromBlock: this.web3.utils.toHex(blockFrom),
-              // toBlock: 'latest'//this.web3.utils.toHex(toHeight),
-              toAddress: [address.toLowerCase()]
+              toBlock: 'latest',//this.web3.utils.toHex(toHeight),
+              toAddress: [address.toLowerCase()],
+              // fromAddress: [address.toLowerCase()],
             }
           ],
           jsonrpc: '2.0',
           id: 0
         },
         (_, data) => {
-          console.log('trace_filter', {blockFrom, data}, _);
+          console.log('trace_filter', {blockFrom, data});
           resolve(data.result || [] as Array<ParityTraceResponse>)
         })
     );
