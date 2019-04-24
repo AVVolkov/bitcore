@@ -55,7 +55,7 @@ export class ParityRPC {
       this.web3.trace.filter( {
         fromBlock: this.web3.utils.toHex(blockFrom),
         toAddress: [address.toLowerCase()],
-      }
+      },
       /*this.web3.eth.currentProvider.send(
         {
           method: 'trace_filter',
