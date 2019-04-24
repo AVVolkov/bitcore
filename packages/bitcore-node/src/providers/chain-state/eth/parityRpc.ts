@@ -42,10 +42,11 @@ export class ParityRPC {
         txid: tx.transactionHash,
         fee: tx.result ? tx.result.gasUsed : null,
         category: 'receive',
-        satoshis: tx.action.value,
+        satoshis: this.web3.utils.toBN(tx.action.value).toString(), //toNumber()
         height: tx.blockNumber,
         address,
-        outputIndex: tx.result ? tx.result.output : null
+        outputIndex: tx.result ? tx.result.output : null,
+        tx,
       };
     }
   }
@@ -55,14 +56,15 @@ export class ParityRPC {
       this.web3.eth.currentProvider.send(
         {
           method: 'trace_filter',
-          params: [
-            {
-              fromBlock: this.web3.utils.toHex(blockFrom),
-              toBlock: 'latest',//this.web3.utils.toHex(toHeight),
-              toAddress: [address.toLowerCase()],
-              // fromAddress: [address.toLowerCase()],
-            }
-          ],
+          params: [{
+            fromBlock: this.web3.utils.toHex(blockFrom),
+            toBlock: 'latest',//this.web3.utils.toHex(toHeight),
+            toAddress: [address.toLowerCase()],
+          }/*,{
+            fromBlock: this.web3.utils.toHex(blockFrom),
+            toBlock: 'latest',//this.web3.utils.toHex(toHeight),
+            fromAddress: [address.toLowerCase()],
+          }*/],
           jsonrpc: '2.0',
           id: 0
         },
