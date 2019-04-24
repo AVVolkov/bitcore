@@ -75,17 +75,18 @@ export class ETHStateProvider extends InternalStateProvider implements CSP.IChai
   }
 
   async streamWalletTransactions(params: CSP.StreamWalletTransactionsParams) {
-    const { network, wallet, req, res } = params;
+    const { network, wallet, req, res} = params;
 
     const web3 = this.getWeb3(network);
     const addresses = await this.getWalletAddresses(wallet._id!);
+    const blockFrom = req.query.from || this.config[network].blockFrom || 0;
 
     Storage.stream(
       new Readable({
         objectMode: true,
         read: async function() {
           for (const walletAddress of addresses) {
-            const transactions = await new ParityRPC(web3).getTransactionsForAddress(100000, walletAddress.address);
+            const transactions = await new ParityRPC(web3).getTransactionsForAddress(blockFrom, walletAddress.address);
             for await (const tx of transactions) {
               this.push(tx);
             }
@@ -105,14 +106,15 @@ export class ETHStateProvider extends InternalStateProvider implements CSP.IChai
   }
 
   async streamAddressTransactions(params: CSP.StreamAddressUtxosParams) {
-    const { address, network, req, res } = params;
+    const { address, network, req, res} = params;
+    const blockFrom = req.query.from || this.config[network].blockFrom || 0;
 
     const web3 = this.getWeb3(network);
     Storage.stream(
       new Readable({
         objectMode: true,
         read: async function() {
-          const transactions = await new ParityRPC(web3).getTransactionsForAddress(100000, address);
+          const transactions = await new ParityRPC(web3).getTransactionsForAddress(blockFrom, address);
           for await (const tx of transactions) {
             this.push(tx);
           }

@@ -34,8 +34,8 @@ export class ParityRPC {
     this.web3 = web3;
   }
 
-  public async *getTransactionsForAddress(bestHeight: number, address: string) {
-    const txs = await this.scan(0, bestHeight, address);
+  public async *getTransactionsForAddress(blockFrom: number, address: string) {
+    const txs = await this.scan(blockFrom, address);
     for (const tx of txs) {
       yield {
         id: null,
@@ -50,23 +50,25 @@ export class ParityRPC {
     }
   }
 
-  scan(fromHeight: number, toHeight: number, address: string) {
+  scan(blockFrom: number, address: string) {
     return new Promise<Array<ParityTraceResponse>>(resolve =>
       this.web3.eth.currentProvider.send(
         {
           method: 'trace_filter',
           params: [
             {
-              fromBlock: this.web3.utils.toHex(fromHeight),
-              toBlock: this.web3.utils.toHex(toHeight),
+              fromBlock: this.web3.utils.toHex(blockFrom),
+              // toBlock: 'latest'/*this.web3.utils.toHex(toHeight)*/,
               toAddress: [address.toLowerCase()]
             }
           ],
           jsonrpc: '2.0',
           id: 0
         },
-        (_, data) => resolve(data.result as Array<ParityTraceResponse>)
-      )
+        (_, data) => {
+          console.log('trace_filter', {blockFrom, data});
+          resolve(data.result || [] as Array<ParityTraceResponse>)
+        })
     );
   }
 }
