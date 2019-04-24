@@ -52,11 +52,7 @@ export class ParityRPC {
 
   scan(blockFrom: number, address: string) {
     return new Promise<Array<ParityTraceResponse>>(resolve =>
-      this.web3.trace.filter( {
-        fromBlock: this.web3.utils.toHex(blockFrom),
-        toAddress: [address.toLowerCase()],
-      },
-      /*this.web3.eth.currentProvider.send(
+      this.web3.eth.currentProvider.send(
         {
           method: 'trace_filter',
           params: [
@@ -68,7 +64,7 @@ export class ParityRPC {
           ],
           jsonrpc: '2.0',
           id: 0
-        },*/
+        },
         (_, data) => {
           console.log('trace_filter', {blockFrom, data}, _);
           resolve(data.result || [] as Array<ParityTraceResponse>)
