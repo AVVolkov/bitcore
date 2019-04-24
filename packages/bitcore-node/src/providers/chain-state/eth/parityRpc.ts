@@ -34,17 +34,44 @@ export class ParityRPC {
     this.web3 = web3;
   }
 
+  fromHex(val) {
+    return this.web3.utils.toBN(val).toString() //toNumber()
+  }
+
   public async *getTransactionsForAddress(blockFrom: number, address: string) {
     const txs = await this.scan(blockFrom, address);
     for (const tx of txs) {
+      /** tx example:
+        {
+          "blockHash": "0x93001b557ccaad225bfbb8b1e6b42c0569be505c53cae79b20d14eef1107f581",
+          "blockNumber": 116026,
+          "subtraces": 0,
+          "traceAddress": [],
+          "transactionHash": "0xba1634109449b5b99afb0af4773991173e47fd434ffd54b0839040878860ab7a",
+          "transactionPosition": 0,
+          "type": "call"
+          "action": {
+            "callType": "call",
+            "from": "0x478e524ef2a381d70c82588a93ca7a5fa9d51cbf",
+            "gas": "0x10d88",
+            "input": "0x",
+            "to": "0x890fe11f3c24db8732d6c2e772e2297c7e65f139",
+            "value": "0x18bbbd9daf13f900000"
+          },
+          "result": {
+            "gasUsed": "0x0",
+            "output": "0x"
+          },
+        },
+      */
       yield {
         id: null,
         txid: tx.transactionHash,
-        fee: tx.result ? tx.result.gasUsed : null,
         category: 'receive',
-        satoshis: this.web3.utils.toBN(tx.action.value).toString(), //toNumber()
         height: tx.blockNumber,
         address,
+        satoshis: this.fromHex(tx.action.value),
+        fee: tx.result ? this.fromHex(tx.result.gasUsed) : null, //tx.action.gas
         outputIndex: tx.result ? tx.result.output : null,
         tx,
       };
