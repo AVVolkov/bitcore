@@ -44,20 +44,22 @@ export class InternalStateProvider implements CSP.IChainStateService {
     if (args.unspent) {
       query.spentHeight = { $lt: SpentHeightIndicators.minimum };
     }
+
     return query;
   }
 
   streamAddressUtxos(params: CSP.StreamAddressUtxosParams) {
     const { req, res, args } = params;
-    const { limit } = args;
+    const { limit, sort } = args;
     const query = this.getAddressQuery(params);
-    Storage.apiStreamingFind(CoinStorage, query, { limit }, req, res);
+    Storage.apiStreamingFind(CoinStorage, query, { limit, sort }, req, res);
   }
 
   async streamAddressTransactions(params: CSP.StreamAddressUtxosParams) {
-    const { req, res } = params;
+    const { req, res, args } = params;
+    const { limit, sort } = args;
     const query = this.getAddressQuery(params);
-    Storage.apiStreamingFind(CoinStorage, query, {}, req, res);
+    Storage.apiStreamingFind(CoinStorage, query, { limit, sort }, req, res);
   }
 
   async getBalanceForAddress(params: CSP.GetBalanceForAddressParams) {

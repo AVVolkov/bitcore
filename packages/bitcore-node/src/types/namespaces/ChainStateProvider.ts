@@ -22,6 +22,7 @@ export declare namespace CSP {
   export type StreamAddressUtxosArgs = {
     unspent: boolean;
     limit: number;
+    sort: any;
   };
 
   export type GetBlockArgs = { limit: null | number };
