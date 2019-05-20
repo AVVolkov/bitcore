@@ -9,10 +9,6 @@ require('heapdump');
 let args = parseArgv([], ['DEBUG']);
 const services: Array<any> = [];
 
-process.on('unhandledRejection', error => {
-  console.error('Unhandled Rejection at:', error.stack || error);
-  stop();
-});
 
 const start = async () => {
   services.push(Storage, Event);
@@ -40,7 +36,17 @@ const stop = async () => {
   process.exit();
 };
 
-process.on('SIGTERM', stop);
-process.on('SIGINT', stop);
+process
+  .on('SIGTERM', stop)
+  .on('SIGINT', stop)
+  .on('uncaughtException', err => {
+    console.error('uncaughtException:', err);
+  })
+  .on('unhandledRejection', err => {
+    console.error('Unhandled Rejection:', err);
+    stop();
+  });
 
-start();
+
+start()
+.catch(err => console.error('Init error', err));

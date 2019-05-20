@@ -1,7 +1,6 @@
 import * as winston from 'winston';
-import parseArgv from './utils/parseArgv';
-let args = parseArgv([], ['DEBUG']);
-const logLevel = args.DEBUG ? 'debug' : 'info';
+import config from './config';
+const logLevel = config.logLevel;
 const logger = new winston.Logger({
   transports: [
     new winston.transports.Console({
