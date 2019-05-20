@@ -151,7 +151,7 @@ export class TransactionModel extends BaseModel<ITransaction> {
       );
 
       // Create events for mempool txs
-      if (params.height < SpentHeightIndicators.minimum) {
+      // if (params.height < SpentHeightIndicators.minimum) {
         for (let op of txOps) {
           const filter = op.updateOne.filter;
           const tx = { ...op.updateOne.update.$set, ...filter };
@@ -165,7 +165,7 @@ export class TransactionModel extends BaseModel<ITransaction> {
             })
             .reduce((promises, promise) => promises.then(promise), Promise.resolve());
         }
-      }
+      // }
     }
   }
 
